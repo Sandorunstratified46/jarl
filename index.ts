@@ -223,4 +223,11 @@ function is_err<T, E>(result: Result<T, E>): result is ErrResult<E> {
   return !result.ok;
 }
 
-export { err, fn, map, or_else, ok, is_ok, is_err };
+function value<T, E>(result: Result<T, E>): T {
+    if (result.ok) {
+        return result.value;
+    }
+    throw result.error;
+}
+
+export { value, err, fn, map, or_else, ok, is_ok, is_err };
