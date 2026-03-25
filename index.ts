@@ -197,7 +197,10 @@ function map(
   };
 }
 
-async function or_else<V, E>(p: Promise<Result<V, E>> | Result<V, E>, d: V): Promise<V> {
+async function or_else<V, E>(
+  p: Promise<Result<V, E>> | Result<V, E>,
+  d: V,
+): Promise<V> {
   try {
     const result = await p;
     if (result.ok) {
@@ -224,10 +227,14 @@ function is_err<T, E>(result: Result<T, E>): result is ErrResult<E> {
 }
 
 function value<T, E>(result: Result<T, E>): T {
-    if (result.ok) {
-        return result.value;
-    }
-    throw result.error;
+  if (result.ok) {
+    return result.value;
+  }
+  throw result.error;
 }
 
-export { value, err, fn, map, or_else, ok, is_ok, is_err };
+async function pvalue<T, E>(p: Promise<Result<T, E>>): Promise<T> {
+  return value(await p);
+}
+
+export { pvalue, value, err, fn, map, or_else, ok, is_ok, is_err };
